@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面接適性クイズ - Interview Aptitude Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+Bengali&family=Noto+Sans+Devanagari&family=Noto+Sans+Myanmar&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', 'Noto Sans Myanmar', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .screen {
+            display: none;
+            padding: 50px;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-large {
+            padding: 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #667eea;
+            color: white;
+            text-align: center;
+        }
+
+        .btn-large:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .industry-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .screen-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        .question-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .choice-btn {
+            padding: 22px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            font-size: 1.15em;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .choice-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(12px);
+        }
+
+        .choice-btn.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .explanation {
+            margin-top: 25px;
+            padding: 22px;
+            background: #fff9e6;
+            border-left: 5px solid #ffc107;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .prev-btn, .next-btn {
+            flex: 1;
+            padding: 20px;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+        }
+
+        .prev-btn {
+            background: #999;
+        }
+
+        .prev-btn:hover {
+            background: #777;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .next-btn.show, .prev-btn.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.4s;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .result-card {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .result-score {
+            font-size: 5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+        }
+
+        .result-judgment {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .result-judgment.pass {
+            background: #d4edda;
+            color: #155724;
+            border: 3px solid #28a745;
+        }
+
+        .result-judgment.review {
+            background: #fff3cd;
+            color: #856404;
+            border: 3px solid #ffc107;
+        }
+
+        .result-judgment.fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 3px solid #dc3545;
+        }
+
+        .result-message {
+            font-size: 1.6em;
+            margin: 25px 0;
+            line-height: 1.6;
+        }
+
+        .restart-btn {
+            padding: 20px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #999;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌏 面接適性クイズ</h1>
+            <p>Interview Aptitude Quiz - 9 Industries × 8 Languages</p>
+        </div>
+
+        <!-- 1. 言語選択画面 -->
+        <div id="languageScreen" class="screen active">
+            <h2 class="screen-title">言語を選択してください<br>Select Your Language</h2>
+            <div class="btn-grid">
+                <button class="btn-large" onclick="selectLanguage('ja')">🇯🇵 日本語</button>
+                <button class="btn-large" onclick="selectLanguage('en')">🇬🇧 English</button>
+                <button class="btn-large" onclick="selectLanguage('my')">🇲🇲 မြန်မာ</button>
+                <button class="btn-large" onclick="selectLanguage('vi')">🇻🇳 Tiếng Việt</button>
+                <button class="btn-large" onclick="selectLanguage('mn')">🇲🇳 Монгол</button>
+                <button class="btn-large" onclick="selectLanguage('bn')">🇧🇩 বাংলা</button>
+                <button class="btn-large" onclick="selectLanguage('si')">🇱🇰 සිංහල</button>
+                <button class="btn-large" onclick="selectLanguage('ne')">🇳🇵 नेपाली</button>
+            </div>
+        </div>
+
+        <!-- 2. 業種選択画面 -->
+        <div id="industryScreen" class="screen">
+            <h2 class="screen-title" id="industryTitle">業種を選択してください</h2>
+            <div class="btn-grid">
+                <button class="btn-large industry-btn" onclick="selectIndustry('restaurant')">🍽️ 飲食業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('manufacturing')">🏭 製造業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('construction')">🏗️ 建設業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('accommodation')">🏨 宿泊業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('logistics')">🚚 物流業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('office')">💼 一般事務</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('cleaning')">🧹 清掃業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('automotive')">🔧 自動車整備業</button>
+                <button class="btn-large industry-btn" onclick="selectIndustry('retail')">🛒 小売業</button>
+            </div>
+            <button class="back-btn" onclick="showScreen('languageScreen')">← 戻る</button>
+        </div>
+
+        <!-- 3. クイズ画面 -->
+        <div id="quizScreen" class="screen">
+            <div class="progress-text" id="progressText"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="questionContainer"></div>
+            <button class="back-btn" onclick="backToIndustry()">← 業種選択に戻る</button>
+        </div>
+
+        <!-- 4. 結果画面 -->
+        <div id="resultScreen" class="screen">
+            <div class="result-card">
+                <h2 id="resultTitle">クイズ完了！</h2>
+                <div class="result-score" id="resultScore"></div>
+                <div class="result-judgment" id="resultJudgment"></div>
+                <div class="result-message" id="resultMessage"></div>
+                <button class="restart-btn" onclick="restart()">最初から / Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // グローバル変数
+        let currentLanguage = 'ja';
+        let currentIndustry = '';
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let maxScore = 0;
+        let allQuestions = [];
+        let commonQuestions = [];
+        let industryQuestions = [];
+        let userAnswers = []; // 回答履歴を保存
+
+        // 多言語テキスト
+        const translations = {
+            ja: {
+                industryTitle: '業種を選択してください',
+                resultTitle: 'クイズ完了！',
+                progressText: '質問 {current} / {total}',
+                nextBtn: '次へ →',
+                msg80: '素晴らしい！この業種に非常に適しています！',
+                msg60: '良い結果です！この業種での活躍が期待できます。',
+                msg40: 'まずまずです。さらに準備を進めましょう。',
+                msg0: '他の業種も検討してみましょう。'
+            },
+            en: {
+                industryTitle: 'Select Industry',
+                resultTitle: 'Quiz Complete!',
+                progressText: 'Question {current} / {total}',
+                nextBtn: 'Next →',
+                msg80: 'Excellent! You are very suitable for this industry!',
+                msg60: 'Good result! You can thrive in this industry.',
+                msg40: 'Not bad. Keep preparing.',
+                msg0: 'Consider other industries as well.'
+            }
+        };
+
+        function getText(key) {
+            const lang = translations[currentLanguage] || translations['ja'];
+            return lang[key] || translations['ja'][key];
+        }
+
+        function selectLanguage(lang) {
+            currentLanguage = lang;
+            showScreen('industryScreen');
+            document.getElementById('industryTitle').textContent = getText('industryTitle');
+        }
+
+        async function selectIndustry(industry) {
+            currentIndustry = industry;
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            maxScore = 0;
+            userAnswers = []; // 回答履歴をリセット
+            
+            await loadQuestions();
+        }
+
+        async function loadQuestions() {
+            try {
+                // 共通質問を読み込み
+                await loadScript(`questions_common_${currentLanguage}.js`, 'common');
+                
+                // 業種別質問を読み込み
+                await loadScript(`questions_${currentIndustry}_short_${currentLanguage}.js`, 'industry');
+                
+                // 質問を結合（共通4問 + 業種別11問）
+                allQuestions = [...commonQuestions, ...industryQuestions];
+                
+                showScreen('quizScreen');
+                showQuestion();
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                alert('質問の読み込みに失敗しました');
+            }
+        }
+
+        function loadScript(filename, type) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = filename;
+                
+                script.onload = function() {
+                    if (type === 'common') {
+                        commonQuestions = JSON.parse(JSON.stringify(window.commonQuestions || []));
+                    } else {
+                        industryQuestions = JSON.parse(JSON.stringify(window.questions || []));
+                    }
+                    resolve();
+                };
+                
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= allQuestions.length) {
+                showResult();
+                return;
+            }
+
+            const question = allQuestions[currentQuestionIndex];
+            maxScore += 1.0;
+
+            const progress = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            const progressText = getText('progressText')
+                .replace('{current}', currentQuestionIndex + 1)
+                .replace('{total}', allQuestions.length);
+            document.getElementById('progressText').textContent = progressText;
+            
+            // 前の問題に戻れるようにprevBtnの表示を制御
+
+            const container = document.getElementById('questionContainer');
+            
+            // 前回の回答があれば選択状態を復元
+            const previousAnswer = userAnswers[currentQuestionIndex];
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-icon">${question.icon || '📝'}</div>
+                    <div class="question-text">Q${currentQuestionIndex + 1}. ${question.question}</div>
+                    <div class="choices">
+                        ${question.choices.map((choice, idx) => `
+                            <button class="choice-btn ${previousAnswer === idx ? 'selected' : ''}" onclick="selectChoice(${idx})" ${previousAnswer !== undefined ? 'disabled' : ''}>
+                                ${choice.emoji} ${choice.text}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="explanation ${previousAnswer !== undefined ? 'show' : ''}" id="explanation">${previousAnswer !== undefined ? question.choices[previousAnswer].explanation : ''}</div>
+                    <div class="nav-buttons" style="display: flex;">
+                        <button class="prev-btn" id="prevBtn" onclick="prevQuestion()" style="${currentQuestionIndex === 0 ? 'visibility: hidden;' : 'display: block;'}">← 前へ / Previous</button>
+                        <button class="next-btn ${previousAnswer !== undefined ? 'show' : ''}" id="nextBtn" onclick="nextQuestion()">${getText('nextBtn')}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectChoice(choiceIndex) {
+            const question = allQuestions[currentQuestionIndex];
+            const choice = question.choices[choiceIndex];
+
+            // 前回の回答があればスコアを引く（戻って再回答の場合）
+            if (userAnswers[currentQuestionIndex] !== undefined) {
+                const prevChoice = question.choices[userAnswers[currentQuestionIndex]];
+                totalScore -= prevChoice.score;
+            }
+
+            // 新しい回答を保存
+            userAnswers[currentQuestionIndex] = choiceIndex;
+            totalScore += choice.score;
+
+            document.querySelectorAll('.choice-btn').forEach((btn, idx) => {
+                btn.classList.remove('selected');
+                btn.disabled = true;
+                if (idx === choiceIndex) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            document.getElementById('explanation').innerHTML = question.explanation;
+            const explanationEl = document.getElementById('explanation');
+            const nextBtnEl = document.getElementById('nextBtn');
+            if (explanationEl) explanationEl.classList.add('show');
+            if (nextBtnEl) nextBtnEl.classList.add('show');
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function showResult() {
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            document.getElementById('resultTitle').textContent = getText('resultTitle');
+            document.getElementById('resultScore').textContent = percentage + '点';
+            
+            // 合格判定
+            let judgment = '';
+            let judgmentClass = '';
+            if (percentage >= 70) {
+                judgment = currentLanguage === 'ja' ? '✅ 合格' : '✅ Pass';
+                judgmentClass = 'pass';
+            } else if (percentage >= 50) {
+                judgment = currentLanguage === 'ja' ? '⚠️ 要検討' : '⚠️ Review Required';
+                judgmentClass = 'review';
+            } else {
+                judgment = currentLanguage === 'ja' ? '❌ 不合格' : '❌ Fail';
+                judgmentClass = 'fail';
+            }
+            
+            const judgmentEl = document.getElementById('resultJudgment');
+            judgmentEl.textContent = judgment;
+            judgmentEl.className = 'result-judgment ' + judgmentClass;
+            
+            let message = '';
+            if (percentage >= 80) {
+                message = getText('msg80');
+            } else if (percentage >= 60) {
+                message = getText('msg60');
+            } else if (percentage >= 40) {
+                message = getText('msg40');
+            } else {
+                message = getText('msg0');
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            showScreen('resultScreen');
+        }
+
+        function backToIndustry() {
+            allQuestions = [];
+            commonQuestions = [];
+            industryQuestions = [];
+            showScreen('industryScreen');
+        }
+
+        function restart() {
+            allQuestions = [];
+            commonQuestions = [];
+            industryQuestions = [];
+            userAnswers = []; // 回答履歴をリセット
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            maxScore = 0;
+            showScreen('languageScreen');
+        }
+    </script>
+</body>
+</html>
