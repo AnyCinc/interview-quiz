@@ -3,589 +3,1066 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>面接適性クイズ - Interview Aptitude Quiz</title>
+    <title>面接対策クイズ - Interview Practice Quiz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+Bengali&family=Noto+Sans+Devanagari&family=Noto+Sans+Myanmar&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ========================================
+           CSS - レスポンシブ対応・スマホファースト
+           ======================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Noto Sans', 'Noto Sans Myanmar', 'Noto Sans Bengali', 'Noto Sans Devanagari', sans-serif;
+            font-family: 'Noto Sans JP', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 12px;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 720px;
             margin: 0 auto;
-            background: white;
+            background: #fff;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
+            min-height: 80vh;
         }
 
+        /* --- ヘッダー --- */
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
+            color: #fff;
+            padding: 28px 20px;
             text-align: center;
+            position: relative;
         }
+        .header h1 { font-size: 1.6em; margin-bottom: 6px; }
+        .header p { font-size: 0.95em; opacity: 0.9; }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .screen {
-            display: none;
-            padding: 50px;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .btn-large {
-            padding: 25px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
+        /* ログイン中のユーザー表示 */
+        .user-badge {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
             cursor: pointer;
-            transition: all 0.3s;
-            background: #667eea;
-            color: white;
-            text-align: center;
         }
+        .user-badge:hover { background: rgba(255,255,255,0.35); }
 
-        .btn-large:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        .industry-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+        /* --- 画面切替 --- */
+        .screen { display: none; padding: 30px 24px; }
+        .screen.active { display: block; }
 
         .screen-title {
             text-align: center;
-            font-size: 2em;
-            margin-bottom: 40px;
-            color: #333;
-        }
-
-        .question-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 35px;
-            margin-bottom: 30px;
-        }
-
-        .question-icon {
-            font-size: 3.5em;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .question-text {
             font-size: 1.5em;
-            font-weight: bold;
-            text-align: center;
+            font-weight: 700;
+            margin-bottom: 28px;
             color: #333;
-            margin-bottom: 35px;
-            line-height: 1.7;
+            line-height: 1.5;
+        }
+        .screen-subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 24px;
+            font-size: 0.95em;
         }
 
-        .choices {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .choice-btn {
-            padding: 22px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            background: white;
-            font-size: 1.15em;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .choice-btn:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
-            transform: translateX(12px);
-        }
-
-        .choice-btn.selected {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-
-        .explanation {
-            margin-top: 25px;
-            padding: 22px;
-            background: #fff9e6;
-            border-left: 5px solid #ffc107;
-            border-radius: 10px;
-            display: none;
-            line-height: 1.6;
-        }
-
-        .explanation.show {
-            display: block;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .prev-btn, .next-btn {
-            flex: 1;
-            padding: 20px;
-            color: white;
+        /* --- ボタン共通 --- */
+        .btn {
+            display: inline-block;
+            padding: 16px 28px;
             border: none;
             border-radius: 12px;
-            font-size: 1.3em;
-            font-weight: bold;
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
-            display: none;
+            transition: all 0.25s;
+            text-align: center;
+            width: 100%;
+            font-family: inherit;
         }
+        .btn:active { transform: scale(0.97); }
 
-        .prev-btn {
-            background: #999;
-        }
-
-        .prev-btn:hover {
-            background: #777;
-        }
-
-        .next-btn {
+        .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+        .btn-primary:hover { box-shadow: 0 8px 25px rgba(102,126,234,0.4); transform: translateY(-3px); }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .btn-secondary:hover { background: #e0e0e0; }
+
+        .btn-back {
+            background: none;
+            color: #888;
+            padding: 10px 0;
+            font-size: 0.95em;
+            width: auto;
+        }
+        .btn-back:hover { color: #555; }
+
+        /* --- グリッドボタン --- */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+        @media (min-width: 480px) {
+            .btn-grid { grid-template-columns: 1fr 1fr; }
         }
 
-        .next-btn.show, .prev-btn.show {
-            display: block;
+        .level-btn {
+            padding: 22px 16px;
+            border: 3px solid #e0e0e0;
+            border-radius: 16px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: center;
+            font-family: inherit;
         }
+        .level-btn:hover { border-color: #667eea; transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .level-btn .level-icon { font-size: 2.2em; margin-bottom: 8px; }
+        .level-btn .level-name { font-size: 1.2em; font-weight: 700; color: #333; }
+        .level-btn .level-desc { font-size: 0.85em; color: #888; margin-top: 4px; }
 
+        .level-btn.beginner:hover { border-color: #4CAF50; }
+        .level-btn.intermediate:hover { border-color: #FF9800; }
+        .level-btn.advanced:hover { border-color: #f44336; }
+
+        /* --- ログイン画面 --- */
+        .login-box {
+            max-width: 360px;
+            margin: 0 auto;
+        }
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-family: inherit;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus { border-color: #667eea; }
+
+        /* --- クイズ画面 --- */
         .progress-bar {
-            height: 10px;
-            background: #e0e0e0;
-            border-radius: 5px;
-            margin-bottom: 25px;
+            height: 8px;
+            background: #e8e8e8;
+            border-radius: 4px;
+            margin-bottom: 8px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: width 0.4s;
+            border-radius: 4px;
         }
-
         .progress-text {
             text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            color: #666;
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 20px;
         }
 
-        .result-card {
-            text-align: center;
-            padding: 50px;
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 28px 20px;
+            margin-bottom: 16px;
         }
 
-        .result-score {
-            font-size: 5em;
-            font-weight: bold;
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .question-number {
+            font-size: 0.9em;
             color: #667eea;
-            margin: 30px 0;
+            font-weight: 700;
         }
-
-        .result-judgment {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        .result-judgment.pass {
-            background: #d4edda;
-            color: #155724;
-            border: 3px solid #28a745;
-        }
-
-        .result-judgment.review {
-            background: #fff3cd;
-            color: #856404;
-            border: 3px solid #ffc107;
-        }
-
-        .result-judgment.fail {
-            background: #f8d7da;
-            color: #721c24;
-            border: 3px solid #dc3545;
-        }
-
-        .result-message {
-            font-size: 1.6em;
-            margin: 25px 0;
-            line-height: 1.6;
-        }
-
-        .restart-btn {
-            padding: 20px 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .speak-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
             border: none;
-            border-radius: 12px;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
             font-size: 1.3em;
-            font-weight: bold;
             cursor: pointer;
-            margin-top: 30px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .speak-btn:hover { transform: scale(1.1); box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
+        .speak-btn.speaking { animation: pulse 1s infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102,126,234,0.5); }
+            50% { box-shadow: 0 0 0 12px rgba(102,126,234,0); }
         }
 
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #999;
-            color: white;
-            border: none;
-            border-radius: 8px;
+        .question-text {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .choices { display: flex; flex-direction: column; gap: 12px; }
+
+        .choice-btn {
+            padding: 18px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: #fff;
             font-size: 1em;
+            text-align: left;
             cursor: pointer;
-            text-decoration: none;
+            transition: all 0.2s;
+            line-height: 1.5;
+            font-family: inherit;
         }
+        .choice-btn:hover { border-color: #667eea; background: #f5f7ff; }
+        .choice-btn.correct { border-color: #4CAF50; background: #e8f5e9; color: #2e7d32; }
+        .choice-btn.wrong { border-color: #f44336; background: #ffebee; color: #c62828; }
+        .choice-btn:disabled { cursor: default; opacity: 0.85; }
+        .choice-btn:disabled:hover { transform: none; }
 
-        .back-btn:hover {
-            background: #777;
+        .explanation-box {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            line-height: 1.7;
+            font-size: 0.95em;
+            display: none;
+        }
+        .explanation-box.show { display: block; }
+        .explanation-box.correct-exp {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            color: #2e7d32;
+        }
+        .explanation-box.wrong-exp {
+            background: #fff3e0;
+            border-left: 4px solid #FF9800;
+            color: #e65100;
+        }
+        .explanation-label { font-weight: 700; margin-bottom: 6px; }
+
+        .next-btn-wrap {
+            margin-top: 18px;
+            display: none;
+        }
+        .next-btn-wrap.show { display: block; }
+
+        /* --- 結果画面 --- */
+        .result-area { text-align: center; }
+        .result-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #fff;
+        }
+        .result-circle.great { background: linear-gradient(135deg, #4CAF50, #2e7d32); }
+        .result-circle.good { background: linear-gradient(135deg, #FF9800, #e65100); }
+        .result-circle.poor { background: linear-gradient(135deg, #f44336, #c62828); }
+        .result-circle small { font-size: 0.35em; font-weight: 400; }
+
+        .result-msg {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 16px 0 8px;
+            color: #333;
+        }
+        .result-detail { color: #777; margin-bottom: 24px; font-size: 0.95em; }
+        .result-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+        /* --- スコア履歴 --- */
+        .history-list { list-style: none; }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-level {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #fff;
+        }
+        .history-level.beginner { background: #4CAF50; }
+        .history-level.intermediate { background: #FF9800; }
+        .history-level.advanced { background: #f44336; }
+
+        .history-score { font-weight: 700; font-size: 1.1em; color: #667eea; }
+        .history-date { color: #aaa; font-size: 0.8em; }
+        .no-history { text-align: center; color: #aaa; padding: 40px 0; }
+
+        /* --- ランキング --- */
+        .ranking-list { list-style: none; }
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .ranking-rank {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+        .ranking-rank.gold { background: #FFD700; color: #7a6200; }
+        .ranking-rank.silver { background: #C0C0C0; color: #555; }
+        .ranking-rank.bronze { background: #CD7F32; color: #fff; }
+        .ranking-rank.normal { background: #eee; color: #888; }
+        .ranking-name { flex: 1; font-weight: 600; }
+        .ranking-score { font-weight: 700; color: #667eea; }
+
+        /* --- タブ --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            color: #aaa;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .tab-btn.active { color: #667eea; border-bottom-color: #667eea; }
+
+        /* --- フッターナビ (ログイン後) --- */
+        .bottom-nav {
+            display: flex;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 14px 8px;
+            border: none;
+            background: none;
+            font-size: 0.75em;
+            cursor: pointer;
+            color: #aaa;
+            text-align: center;
+            transition: color 0.2s;
+            font-family: inherit;
+        }
+        .nav-btn.active { color: #667eea; }
+        .nav-btn:hover { color: #667eea; }
+        .nav-icon { font-size: 1.6em; display: block; margin-bottom: 2px; }
+
+        /* --- レスポンシブ --- */
+        @media (max-width: 480px) {
+            body { padding: 6px; }
+            .screen { padding: 20px 16px; }
+            .header { padding: 20px 14px; }
+            .header h1 { font-size: 1.3em; }
+            .question-text { font-size: 1.1em; }
+            .result-circle { width: 130px; height: 130px; font-size: 2.2em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🌏 面接適性クイズ</h1>
-            <p>Interview Aptitude Quiz - 9 Industries × 8 Languages</p>
-        </div>
+<div class="container">
 
-        <!-- 1. 言語選択画面 -->
-        <div id="languageScreen" class="screen active">
-            <h2 class="screen-title">言語を選択してください<br>Select Your Language</h2>
-            <div class="btn-grid">
-                <button class="btn-large" onclick="selectLanguage('ja')">🇯🇵 日本語</button>
-                <button class="btn-large" onclick="selectLanguage('en')">🇬🇧 English</button>
-                <button class="btn-large" onclick="selectLanguage('my')">🇲🇲 မြန်မာ</button>
-                <button class="btn-large" onclick="selectLanguage('vi')">🇻🇳 Tiếng Việt</button>
-                <button class="btn-large" onclick="selectLanguage('mn')">🇲🇳 Монгол</button>
-                <button class="btn-large" onclick="selectLanguage('bn')">🇧🇩 বাংলা</button>
-                <button class="btn-large" onclick="selectLanguage('si')">🇱🇰 සිංහල</button>
-                <button class="btn-large" onclick="selectLanguage('ne')">🇳🇵 नेपाली</button>
-            </div>
-        </div>
+    <!-- ヘッダー -->
+    <div class="header">
+        <h1>面接対策クイズ</h1>
+        <p>Interview Practice Quiz</p>
+        <div class="user-badge" id="userBadge" style="display:none;" onclick="showScreen('profileScreen')"></div>
+    </div>
 
-        <!-- 2. 業種選択画面 -->
-        <div id="industryScreen" class="screen">
-            <h2 class="screen-title" id="industryTitle">業種を選択してください</h2>
-            <div class="btn-grid">
-                <button class="btn-large industry-btn" onclick="selectIndustry('restaurant')">🍽️ 飲食業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('manufacturing')">🏭 製造業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('construction')">🏗️ 建設業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('accommodation')">🏨 宿泊業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('logistics')">🚚 物流業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('office')">💼 一般事務</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('cleaning')">🧹 清掃業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('automotive')">🔧 自動車整備業</button>
-                <button class="btn-large industry-btn" onclick="selectIndustry('retail')">🛒 小売業</button>
-            </div>
-            <button class="back-btn" onclick="showScreen('languageScreen')">← 戻る</button>
-        </div>
-
-        <!-- 3. クイズ画面 -->
-        <div id="quizScreen" class="screen">
-            <div class="progress-text" id="progressText"></div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div id="questionContainer"></div>
-            <button class="back-btn" onclick="backToIndustry()">← 業種選択に戻る</button>
-        </div>
-
-        <!-- 4. 結果画面 -->
-        <div id="resultScreen" class="screen">
-            <div class="result-card">
-                <h2 id="resultTitle">クイズ完了！</h2>
-                <div class="result-score" id="resultScore"></div>
-                <div class="result-judgment" id="resultJudgment"></div>
-                <div class="result-message" id="resultMessage"></div>
-                <button class="restart-btn" onclick="restart()">最初から / Restart</button>
-            </div>
+    <!-- ============ 1. ログイン画面 ============ -->
+    <div id="loginScreen" class="screen active">
+        <h2 class="screen-title">ようこそ！<br>Welcome!</h2>
+        <p class="screen-subtitle">ユーザー名を入力してください<br>Enter your username</p>
+        <div class="login-box">
+            <input type="text" class="input-field" id="usernameInput" placeholder="名前 / Name" maxlength="20">
+            <button class="btn btn-primary" onclick="login()">スタート / Start</button>
+            <p id="loginError" style="color:#f44336; text-align:center; margin-top:10px; display:none;">名前を入力してください</p>
         </div>
     </div>
 
-    <script>
-        // グローバル変数
-        let currentLanguage = 'ja';
-        let currentIndustry = '';
-        let currentQuestionIndex = 0;
-        let totalScore = 0;
-        let maxScore = 0;
-        let allQuestions = [];
-        let commonQuestions = [];
-        let industryQuestions = [];
-        let userAnswers = []; // 回答履歴を保存
+    <!-- ============ 2. レベル選択画面 ============ -->
+    <div id="levelScreen" class="screen">
+        <h2 class="screen-title">レベルを選んでください<br>Choose a Level</h2>
+        <div class="btn-grid">
+            <button class="level-btn beginner" onclick="startQuiz('beginner')">
+                <div class="level-icon">🌱</div>
+                <div class="level-name">初級 Beginner</div>
+                <div class="level-desc">N5 - 基本的な質問<br>Basic Questions</div>
+            </button>
+            <button class="level-btn intermediate" onclick="startQuiz('intermediate')">
+                <div class="level-icon">📚</div>
+                <div class="level-name">中級 Intermediate</div>
+                <div class="level-desc">N4 - 実践的な質問<br>Practical Questions</div>
+            </button>
+            <button class="level-btn advanced" onclick="startQuiz('advanced')">
+                <div class="level-icon">🎯</div>
+                <div class="level-name">上級 Advanced</div>
+                <div class="level-desc">N3+ - 応用質問<br>Advanced Questions</div>
+            </button>
+        </div>
+    </div>
 
-        // 多言語テキスト
-        const translations = {
-            ja: {
-                industryTitle: '業種を選択してください',
-                resultTitle: 'クイズ完了！',
-                progressText: '質問 {current} / {total}',
-                nextBtn: '次へ →',
-                msg80: '素晴らしい！この業種に非常に適しています！',
-                msg60: '良い結果です！この業種での活躍が期待できます。',
-                msg40: 'まずまずです。さらに準備を進めましょう。',
-                msg0: '他の業種も検討してみましょう。'
-            },
-            en: {
-                industryTitle: 'Select Industry',
-                resultTitle: 'Quiz Complete!',
-                progressText: 'Question {current} / {total}',
-                nextBtn: 'Next →',
-                msg80: 'Excellent! You are very suitable for this industry!',
-                msg60: 'Good result! You can thrive in this industry.',
-                msg40: 'Not bad. Keep preparing.',
-                msg0: 'Consider other industries as well.'
-            }
-        };
+    <!-- ============ 3. クイズ画面 ============ -->
+    <div id="quizScreen" class="screen">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText"></div>
+        <div id="questionContainer"></div>
+        <button class="btn btn-back" onclick="confirmQuit()">&#8592; やめる / Quit</button>
+    </div>
 
-        function getText(key) {
-            const lang = translations[currentLanguage] || translations['ja'];
-            return lang[key] || translations['ja'][key];
-        }
+    <!-- ============ 4. 結果画面 ============ -->
+    <div id="resultScreen" class="screen">
+        <div class="result-area" id="resultArea"></div>
+    </div>
 
-        function selectLanguage(lang) {
-            currentLanguage = lang;
-            showScreen('industryScreen');
-            document.getElementById('industryTitle').textContent = getText('industryTitle');
-        }
+    <!-- ============ 5. プロフィール / 履歴画面 ============ -->
+    <div id="profileScreen" class="screen">
+        <h2 class="screen-title" id="profileTitle"></h2>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('history', this)">履歴 History</button>
+            <button class="tab-btn" onclick="switchTab('ranking', this)">ランキング Ranking</button>
+        </div>
+        <div id="historyTab"></div>
+        <div id="rankingTab" style="display:none;"></div>
+        <div style="margin-top:24px;">
+            <button class="btn btn-primary" onclick="showScreen('levelScreen')">クイズに戻る / Back to Quiz</button>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="logout()">ログアウト / Logout</button>
+        </div>
+    </div>
 
-        async function selectIndustry(industry) {
-            currentIndustry = industry;
-            currentQuestionIndex = 0;
-            totalScore = 0;
-            maxScore = 0;
-            userAnswers = []; // 回答履歴をリセット
-            
-            await loadQuestions();
-        }
+    <!-- 下部ナビ -->
+    <div class="bottom-nav" id="bottomNav" style="display:none;">
+        <button class="nav-btn active" id="navQuiz" onclick="showScreen('levelScreen')">
+            <span class="nav-icon">&#9997;</span> クイズ
+        </button>
+        <button class="nav-btn" id="navProfile" onclick="showScreen('profileScreen')">
+            <span class="nav-icon">&#128100;</span> マイページ
+        </button>
+    </div>
+</div>
 
-        async function loadQuestions() {
-            try {
-                // 共通質問を読み込み
-                await loadScript(`questions_common_${currentLanguage}.js`, 'common');
-                
-                // 業種別質問を読み込み
-                await loadScript(`questions_${currentIndustry}_short_${currentLanguage}.js`, 'industry');
-                
-                // 質問を結合（共通4問 + 業種別11問）
-                allQuestions = [...commonQuestions, ...industryQuestions];
-                
-                showScreen('quizScreen');
-                showQuestion();
-            } catch (error) {
-                console.error('Error loading questions:', error);
-                alert('質問の読み込みに失敗しました');
-            }
-        }
+<script>
+/* ========================================================
+   JavaScript - 面接対策クイズアプリ
+   ======================================================== */
 
-        function loadScript(filename, type) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = filename;
-                
-                script.onload = function() {
-                    if (type === 'common') {
-                        commonQuestions = JSON.parse(JSON.stringify(window.commonQuestions || []));
-                    } else {
-                        industryQuestions = JSON.parse(JSON.stringify(window.questions || []));
-                    }
-                    resolve();
-                };
-                
-                script.onerror = reject;
-                document.head.appendChild(script);
-            });
-        }
+// ====================
+// 問題データ（15問以上・3レベル）
+// ====================
+// ★ 問題を追加するには、該当レベルの配列に同じ形式のオブジェクトを追加してください
+// question: 質問文, choices: 4つの選択肢(text, correct, explanation), answer: 正解インデックス(0-3)
+const QUESTIONS = {
 
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-        }
+  // ===== 初級（Beginner / N5レベル）=====
+  beginner: [
+    {
+      question: "面接で「おはようございます」はいつ使いますか？",
+      choices: [
+        { text: "朝の挨拶として使う", correct: true, explanation: "「おはようございます」は朝の丁寧な挨拶です。面接が午前中の場合に使います。" },
+        { text: "夜の挨拶として使う", correct: false, explanation: "夜は「こんばんは」を使います。" },
+        { text: "帰るときに使う", correct: false, explanation: "帰るときは「失礼します」や「お疲れさまでした」を使います。" },
+        { text: "食事の前に使う", correct: false, explanation: "食事の前は「いただきます」を使います。" }
+      ]
+    },
+    {
+      question: "面接官に名前を聞かれました。どう答えますか？",
+      choices: [
+        { text: "「私の名前は〇〇です。よろしくお願いします。」", correct: true, explanation: "名前を言った後、「よろしくお願いします」を添えるのが丁寧で好印象です。" },
+        { text: "「〇〇。」と名前だけ言う", correct: false, explanation: "名前だけでは丁寧さが足りません。「です」「よろしくお願いします」をつけましょう。" },
+        { text: "何も答えない", correct: false, explanation: "質問に答えないのは失礼です。必ず返事をしましょう。" },
+        { text: "ニックネームで答える", correct: false, explanation: "面接ではフルネームを使いましょう。ニックネームはカジュアルすぎます。" }
+      ]
+    },
+    {
+      question: "「日本でどれくらい働きたいですか？」と聞かれました。一番いい答えは？",
+      choices: [
+        { text: "「できるだけ長く働きたいです。」", correct: true, explanation: "長期間働く意欲を見せることで、会社は安心して採用できます。" },
+        { text: "「わかりません。」", correct: false, explanation: "計画がないと思われ、不安を与えます。" },
+        { text: "「1か月だけ働きたいです。」", correct: false, explanation: "短すぎると会社にとってメリットがありません。" },
+        { text: "「お金がなくなったら帰ります。」", correct: false, explanation: "仕事への真剣さが伝わりません。前向きな理由を話しましょう。" }
+      ]
+    },
+    {
+      question: "面接に行くとき、どんな服を着ますか？",
+      choices: [
+        { text: "清潔感のあるきちんとした服装", correct: true, explanation: "面接ではスーツまたは清潔感のある服装が基本です。第一印象はとても大切です。" },
+        { text: "Tシャツとジーンズ", correct: false, explanation: "カジュアルすぎます。面接は正式な場です。" },
+        { text: "派手な色の服", correct: false, explanation: "落ち着いた色（紺、黒、グレー）が好まれます。" },
+        { text: "何でもいい", correct: false, explanation: "服装は面接の評価に影響します。清潔感が大切です。" }
+      ]
+    },
+    {
+      question: "面接の時間に遅れそうです。どうしますか？",
+      choices: [
+        { text: "すぐに電話して、遅れることを伝える", correct: true, explanation: "遅れるとわかったら、すぐに連絡するのがマナーです。正直に理由を伝えましょう。" },
+        { text: "連絡しないで行く", correct: false, explanation: "連絡なしの遅刻はとても失礼です。信頼を失います。" },
+        { text: "面接に行かない", correct: false, explanation: "無断欠席は最悪です。必ず連絡しましょう。" },
+        { text: "次の日に行く", correct: false, explanation: "勝手に日程を変えてはいけません。まず連絡しましょう。" }
+      ]
+    },
+    {
+      question: "「趣味は何ですか？」と聞かれました。なぜこの質問をしますか？",
+      choices: [
+        { text: "あなたの人柄を知りたいから", correct: true, explanation: "趣味の質問は、あなたの性格やストレス発散方法を知るためです。正直に答えましょう。" },
+        { text: "テストしているから", correct: false, explanation: "テストではなく、あなたを知るための質問です。" },
+        { text: "関係ない話をしたいから", correct: false, explanation: "面接の質問にはすべて意味があります。" },
+        { text: "時間を埋めるため", correct: false, explanation: "面接官は限られた時間で必要な情報を得ようとしています。" }
+      ]
+    }
+  ],
 
-        function showQuestion() {
-            if (currentQuestionIndex >= allQuestions.length) {
-                showResult();
-                return;
-            }
+  // ===== 中級（Intermediate / N4レベル）=====
+  intermediate: [
+    {
+      question: "「なぜこの仕事を選びましたか？」と聞かれました。最も適切な答えは？",
+      choices: [
+        { text: "「この分野に興味があり、自分の経験を活かせると思ったからです。」", correct: true, explanation: "具体的な理由と自分の強みを結びつけた答えが好印象です。" },
+        { text: "「給料がいいからです。」", correct: false, explanation: "お金だけが理由だと、すぐ辞めると思われます。" },
+        { text: "「他に仕事がなかったからです。」", correct: false, explanation: "消極的な理由は良い印象を与えません。" },
+        { text: "「友達に言われたからです。」", correct: false, explanation: "自分の意思がないと思われます。自分の考えを伝えましょう。" }
+      ]
+    },
+    {
+      question: "「仕事でミスをしたとき、どうしますか？」と聞かれました。ベストな回答は？",
+      choices: [
+        { text: "「すぐに上司に報告して、対処方法を相談します。」", correct: true, explanation: "「報連相」（報告・連絡・相談）は日本の職場で最も重要なスキルです。ミスを隠さず報告する姿勢が評価されます。" },
+        { text: "「自分で直します。誰にも言いません。」", correct: false, explanation: "ミスを隠すと問題が大きくなります。必ず報告しましょう。" },
+        { text: "「ミスはしません。」", correct: false, explanation: "誰でもミスはします。大切なのはミスの後の対応です。" },
+        { text: "「他の人のせいにします。」", correct: false, explanation: "責任転嫁は信頼を失います。自分の責任を認めることが大切です。" }
+      ]
+    },
+    {
+      question: "「将来の夢は何ですか？」と聞かれました。どう答えますか？",
+      choices: [
+        { text: "「スキルを磨いて、会社に貢献できる人材になりたいです。」", correct: true, explanation: "会社での成長と貢献を結びつけた回答が最も好印象です。" },
+        { text: "「お金を貯めて国に帰りたいです。」", correct: false, explanation: "すぐ辞めると思われます。長期的な目標を話しましょう。" },
+        { text: "「特にありません。」", correct: false, explanation: "目標がない人は成長意欲がないと見られます。" },
+        { text: "「社長になりたいです。」", correct: false, explanation: "現実的な目標の方が信頼されます。段階的な成長を示しましょう。" }
+      ]
+    },
+    {
+      question: "日本の会社で「報連相」とは何ですか？",
+      choices: [
+        { text: "報告・連絡・相談のこと", correct: true, explanation: "「報連相（ほうれんそう）」は日本の仕事の基本です。上司への報告、チームへの連絡、困ったときの相談を大切にしましょう。" },
+        { text: "野菜の名前", correct: false, explanation: "「ほうれん草」は野菜ですが、「報連相」はビジネス用語です。" },
+        { text: "会議の方法", correct: false, explanation: "会議ではなく、日常的なコミュニケーションの方法です。" },
+        { text: "休憩時間のルール", correct: false, explanation: "休憩とは関係ありません。仕事中の情報共有の仕方です。" }
+      ]
+    },
+    {
+      question: "同僚と意見が違ったとき、どうしますか？",
+      choices: [
+        { text: "「まず相手の意見を聞いてから、自分の考えを丁寧に伝えます。」", correct: true, explanation: "日本の職場ではチームワークが重要です。相手を尊重しながら意見交換する姿勢が評価されます。" },
+        { text: "「自分が正しいと主張します。」", correct: false, explanation: "一方的な主張は協調性がないと見られます。" },
+        { text: "「何も言いません。我慢します。」", correct: false, explanation: "意見を言わないと問題解決になりません。丁寧に伝えることが大切です。" },
+        { text: "「上司に言って解決してもらいます。」", correct: false, explanation: "まず当事者同士で話し合うことが先です。" }
+      ]
+    },
+    {
+      question: "「日本語はどれくらいできますか？」と聞かれました。正直に言うべきですか？",
+      choices: [
+        { text: "正直に現在のレベルを伝え、勉強中であることもアピールする", correct: true, explanation: "正直さは信頼につながります。「まだ勉強中ですが、毎日練習しています」と伝えると好印象です。" },
+        { text: "「ペラペラです」と嘘をつく", correct: false, explanation: "嘘はすぐにバレます。信頼を失うので絶対にやめましょう。" },
+        { text: "「全然できません」と謙遜しすぎる", correct: false, explanation: "謙遜しすぎると能力が低いと思われます。" },
+        { text: "答えない", correct: false, explanation: "質問に答えないのは失礼です。" }
+      ]
+    }
+  ],
 
-            const question = allQuestions[currentQuestionIndex];
-            maxScore += 1.0;
+  // ===== 上級（Advanced / N3+レベル）=====
+  advanced: [
+    {
+      question: "「あなたの長所と短所を教えてください」と聞かれました。短所の伝え方で最も適切なのは？",
+      choices: [
+        { text: "「心配性なところがありますが、その分確認を丁寧にするよう心がけています。」", correct: true, explanation: "短所を正直に述べた上で、それを改善する努力や、長所に転換する姿勢を示すのが最も効果的です。" },
+        { text: "「短所はありません。」", correct: false, explanation: "自己分析ができていないと判断されます。誰にでも短所はあります。" },
+        { text: "「遅刻が多いです。」", correct: false, explanation: "仕事に直接影響する重大な短所は避けましょう。" },
+        { text: "「たくさんありすぎて選べません。」", correct: false, explanation: "自信のなさが伝わります。一つを選んで改善策を述べましょう。" }
+      ]
+    },
+    {
+      question: "「前の仕事を辞めた理由は何ですか？」と聞かれたとき、どう答えるべきですか？",
+      choices: [
+        { text: "「新しいスキルを身につけたいと思い、キャリアアップのために転職を決意しました。」", correct: true, explanation: "前向きな理由を伝えることが重要です。前の会社の悪口は絶対に言ってはいけません。" },
+        { text: "「前の会社は給料が安くて、上司も最悪でした。」", correct: false, explanation: "前職の悪口は絶対NGです。「この人はうちの会社でも不満を言うだろう」と思われます。" },
+        { text: "「クビになりました。」", correct: false, explanation: "たとえ事実でも、言い方を工夫しましょう。前向きな表現に変えましょう。" },
+        { text: "「理由はありません。」", correct: false, explanation: "理由がないと計画性がないと思われます。" }
+      ]
+    },
+    {
+      question: "「残業についてどう思いますか？」と聞かれました。どう答えますか？",
+      choices: [
+        { text: "「必要に応じて対応できます。効率よく仕事を進めることも心がけたいです。」", correct: true, explanation: "柔軟な姿勢を示しつつ、効率的に働く意識もアピールするのがベストです。" },
+        { text: "「残業は絶対にしたくありません。」", correct: false, explanation: "協調性がないと見られます。柔軟な姿勢が大切です。" },
+        { text: "「いくらでも残業します。」", correct: false, explanation: "体を壊すリスクがあり、会社も責任を問われます。バランスが大切です。" },
+        { text: "「残業代が出るなら働きます。」", correct: false, explanation: "お金だけが動機と思われます。仕事への姿勢を示しましょう。" }
+      ]
+    },
+    {
+      question: "日本の会社で「空気を読む」とはどういう意味ですか？",
+      choices: [
+        { text: "その場の雰囲気や相手の気持ちを察して、適切に行動すること", correct: true, explanation: "「空気を読む」は日本の職場文化で非常に重要です。言葉にされていないことを理解し、チームの調和を保つ力が求められます。" },
+        { text: "天気予報を見ること", correct: false, explanation: "「空気」は雰囲気のことです。天気とは関係ありません。" },
+        { text: "深呼吸をすること", correct: false, explanation: "比喩的な表現で、周囲の状況を察する能力のことです。" },
+        { text: "上司の言うことに全て従うこと", correct: false, explanation: "盲目的に従うことではなく、状況を理解して適切に対応することです。" }
+      ]
+    },
+    {
+      question: "「5年後、どんな自分になっていたいですか？」と聞かれました。どう答えますか？",
+      choices: [
+        { text: "「業務の専門知識を深め、後輩の指導もできるようになりたいです。」", correct: true, explanation: "会社での長期的な成長ビジョンを示すことで、定着意欲と向上心の両方をアピールできます。" },
+        { text: "「独立して自分の会社を作りたいです。」", correct: false, explanation: "すぐに辞めると思われます。会社での成長を語りましょう。" },
+        { text: "「考えたことがありません。」", correct: false, explanation: "将来を考えていないと、向上心がないと判断されます。" },
+        { text: "「日本にはいないと思います。」", correct: false, explanation: "長期的に働く気がないと思われ、採用リスクが高いと判断されます。" }
+      ]
+    },
+    {
+      question: "面接の最後に「何か質問はありますか？」と聞かれました。どうしますか？",
+      choices: [
+        { text: "「入社までに準備しておくことはありますか？」と質問する", correct: true, explanation: "入社意欲を示す前向きな質問が好印象です。仕事内容や研修について聞くのも良いでしょう。" },
+        { text: "「特にありません。」と答える", correct: false, explanation: "興味がないと思われます。1つは質問を準備しましょう。" },
+        { text: "「給料はいくらですか？」と聞く", correct: false, explanation: "最初の質問がお金だと印象が悪いです。内定後に確認しましょう。" },
+        { text: "「休みは何日ありますか？」と聞く", correct: false, explanation: "休みの質問を最初にすると、仕事より休みが大切と思われます。" }
+      ]
+    },
+    {
+      question: "お客様からクレームを受けました。最初にすべきことは？",
+      choices: [
+        { text: "まずお客様の話を最後まで聞き、謝罪する", correct: true, explanation: "クレーム対応の基本は「傾聴」と「共感」です。まず相手の気持ちを受け止め、「ご不便をおかけして申し訳ございません」と謝罪しましょう。" },
+        { text: "すぐに言い訳をする", correct: false, explanation: "言い訳は火に油を注ぎます。まず聞くことが大切です。" },
+        { text: "無視する", correct: false, explanation: "無視は問題を大きくします。誠実に対応しましょう。" },
+        { text: "「私の担当ではありません」と言う", correct: false, explanation: "たらい回しはお客様の怒りを増します。まず受け止めましょう。" }
+      ]
+    }
+  ]
+};
 
-            const progress = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-            
-            const progressText = getText('progressText')
-                .replace('{current}', currentQuestionIndex + 1)
-                .replace('{total}', allQuestions.length);
-            document.getElementById('progressText').textContent = progressText;
-            
-            // 前の問題に戻れるようにprevBtnの表示を制御
+// ====================
+// アプリの状態管理
+// ====================
+let currentUser = null;       // ログイン中のユーザー名
+let currentLevel = '';        // 選択中のレベル
+let currentIndex = 0;         // 現在の問題番号
+let score = 0;                // 現在のスコア
+let questions = [];           // 現在の出題リスト
+let answered = false;         // 回答済みフラグ
 
-            const container = document.getElementById('questionContainer');
-            
-            // 前回の回答があれば選択状態を復元
-            const previousAnswer = userAnswers[currentQuestionIndex];
-            container.innerHTML = `
-                <div class="question-card">
-                    <div class="question-icon">${question.icon || '📝'}</div>
-                    <div class="question-text">Q${currentQuestionIndex + 1}. ${question.question}</div>
-                    <div class="choices">
-                        ${question.choices.map((choice, idx) => `
-                            <button class="choice-btn ${previousAnswer === idx ? 'selected' : ''}" onclick="selectChoice(${idx})" ${previousAnswer !== undefined ? 'disabled' : ''}>
-                                ${choice.emoji} ${choice.text}
-                            </button>
-                        `).join('')}
-                    </div>
-                    <div class="explanation ${previousAnswer !== undefined ? 'show' : ''}" id="explanation">${previousAnswer !== undefined ? question.choices[previousAnswer].explanation : ''}</div>
-                    <div class="nav-buttons" style="display: flex;">
-                        <button class="prev-btn" id="prevBtn" onclick="prevQuestion()" style="${currentQuestionIndex === 0 ? 'visibility: hidden;' : 'display: block;'}">← 前へ / Previous</button>
-                        <button class="next-btn ${previousAnswer !== undefined ? 'show' : ''}" id="nextBtn" onclick="nextQuestion()">${getText('nextBtn')}</button>
-                    </div>
-                </div>
-            `;
-        }
+// ====================
+// ローカルストレージ操作
+// ====================
+function getUsers() {
+    return JSON.parse(localStorage.getItem('quizUsers') || '{}');
+}
+function saveUsers(users) {
+    localStorage.setItem('quizUsers', JSON.stringify(users));
+}
+function getUserData() {
+    const users = getUsers();
+    if (!users[currentUser]) {
+        users[currentUser] = { history: [] };
+        saveUsers(users);
+    }
+    return users[currentUser];
+}
+function saveScore(level, correct, total) {
+    const users = getUsers();
+    if (!users[currentUser]) users[currentUser] = { history: [] };
+    users[currentUser].history.push({
+        level: level,
+        correct: correct,
+        total: total,
+        percent: Math.round((correct / total) * 100),
+        date: new Date().toISOString().slice(0, 10)
+    });
+    saveUsers(users);
+}
 
-        function selectChoice(choiceIndex) {
-            const question = allQuestions[currentQuestionIndex];
-            const choice = question.choices[choiceIndex];
+// ====================
+// 画面切替
+// ====================
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
 
-            // 前回の回答があればスコアを引く（戻って再回答の場合）
-            if (userAnswers[currentQuestionIndex] !== undefined) {
-                const prevChoice = question.choices[userAnswers[currentQuestionIndex]];
-                totalScore -= prevChoice.score;
-            }
+    // ナビのアクティブ状態更新
+    document.getElementById('navQuiz').classList.toggle('active', screenId === 'levelScreen' || screenId === 'quizScreen');
+    document.getElementById('navProfile').classList.toggle('active', screenId === 'profileScreen');
 
-            // 新しい回答を保存
-            userAnswers[currentQuestionIndex] = choiceIndex;
-            totalScore += choice.score;
+    // プロフィール画面表示時にデータ更新
+    if (screenId === 'profileScreen') renderProfile();
+}
 
-            document.querySelectorAll('.choice-btn').forEach((btn, idx) => {
-                btn.classList.remove('selected');
-                btn.disabled = true;
-                if (idx === choiceIndex) {
-                    btn.classList.add('selected');
-                }
-            });
+// ====================
+// ログイン / ログアウト
+// ====================
+function login() {
+    const name = document.getElementById('usernameInput').value.trim();
+    if (!name) {
+        document.getElementById('loginError').style.display = 'block';
+        return;
+    }
+    document.getElementById('loginError').style.display = 'none';
+    currentUser = name;
 
-            document.getElementById('explanation').innerHTML = question.explanation;
-            const explanationEl = document.getElementById('explanation');
-            const nextBtnEl = document.getElementById('nextBtn');
-            if (explanationEl) explanationEl.classList.add('show');
-            if (nextBtnEl) nextBtnEl.classList.add('show');
-        }
+    // ユーザーデータ初期化
+    getUserData();
 
-        function prevQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                showQuestion();
-            }
-        }
+    // UI更新
+    document.getElementById('userBadge').textContent = name;
+    document.getElementById('userBadge').style.display = 'block';
+    document.getElementById('bottomNav').style.display = 'flex';
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            showQuestion();
-        }
+    showScreen('levelScreen');
+}
 
-        function showResult() {
-            const percentage = Math.round((totalScore / maxScore) * 100);
-            
-            document.getElementById('resultTitle').textContent = getText('resultTitle');
-            document.getElementById('resultScore').textContent = percentage + '点';
-            
-            // 合格判定
-            let judgment = '';
-            let judgmentClass = '';
-            if (percentage >= 70) {
-                judgment = currentLanguage === 'ja' ? '✅ 合格' : '✅ Pass';
-                judgmentClass = 'pass';
-            } else if (percentage >= 50) {
-                judgment = currentLanguage === 'ja' ? '⚠️ 要検討' : '⚠️ Review Required';
-                judgmentClass = 'review';
-            } else {
-                judgment = currentLanguage === 'ja' ? '❌ 不合格' : '❌ Fail';
-                judgmentClass = 'fail';
-            }
-            
-            const judgmentEl = document.getElementById('resultJudgment');
-            judgmentEl.textContent = judgment;
-            judgmentEl.className = 'result-judgment ' + judgmentClass;
-            
-            let message = '';
-            if (percentage >= 80) {
-                message = getText('msg80');
-            } else if (percentage >= 60) {
-                message = getText('msg60');
-            } else if (percentage >= 40) {
-                message = getText('msg40');
-            } else {
-                message = getText('msg0');
-            }
-            
-            document.getElementById('resultMessage').textContent = message;
-            showScreen('resultScreen');
-        }
+function logout() {
+    currentUser = null;
+    document.getElementById('userBadge').style.display = 'none';
+    document.getElementById('bottomNav').style.display = 'none';
+    document.getElementById('usernameInput').value = '';
+    showScreen('loginScreen');
+}
 
-        function backToIndustry() {
-            allQuestions = [];
-            commonQuestions = [];
-            industryQuestions = [];
-            showScreen('industryScreen');
-        }
+// 起動時に前回のユーザーを復元
+(function autoLogin() {
+    const users = getUsers();
+    const lastUser = localStorage.getItem('quizLastUser');
+    if (lastUser && users[lastUser]) {
+        document.getElementById('usernameInput').value = lastUser;
+    }
+})();
 
-        function restart() {
-            allQuestions = [];
-            commonQuestions = [];
-            industryQuestions = [];
-            userAnswers = []; // 回答履歴をリセット
-            currentQuestionIndex = 0;
-            totalScore = 0;
-            maxScore = 0;
-            showScreen('languageScreen');
-        }
-    </script>
+// ====================
+// クイズ開始
+// ====================
+function startQuiz(level) {
+    currentLevel = level;
+    currentIndex = 0;
+    score = 0;
+    answered = false;
+    // 問題をシャッフルしてコピー
+    questions = shuffle([...QUESTIONS[level]]);
+    localStorage.setItem('quizLastUser', currentUser);
+    showScreen('quizScreen');
+    renderQuestion();
+}
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// ====================
+// 問題表示
+// ====================
+function renderQuestion() {
+    if (currentIndex >= questions.length) {
+        finishQuiz();
+        return;
+    }
+
+    answered = false;
+    const q = questions[currentIndex];
+    const total = questions.length;
+    const pct = ((currentIndex) / total) * 100;
+
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent =
+        '問題 ' + (currentIndex + 1) + ' / ' + total + '  (' + getLevelLabel(currentLevel) + ')';
+
+    const container = document.getElementById('questionContainer');
+    container.innerHTML = `
+        <div class="question-card">
+            <div class="question-header">
+                <span class="question-number">Q${currentIndex + 1}</span>
+                <button class="speak-btn" id="speakBtn" onclick="speakQuestion()" title="音声で聞く">&#128264;</button>
+            </div>
+            <div class="question-text">${q.question}</div>
+            <div class="choices">
+                ${q.choices.map((c, i) => `
+                    <button class="choice-btn" id="choice${i}" onclick="selectAnswer(${i})">${c.text}</button>
+                `).join('')}
+            </div>
+            <div class="explanation-box" id="explanationBox"></div>
+            <div class="next-btn-wrap" id="nextWrap">
+                <button class="btn btn-primary" onclick="nextQuestion()">次へ &rarr;</button>
+            </div>
+        </div>
+    `;
+}
+
+// ====================
+// 回答選択
+// ====================
+function selectAnswer(idx) {
+    if (answered) return;
+    answered = true;
+
+    const q = questions[currentIndex];
+    const selected = q.choices[idx];
+    const correctIdx = q.choices.findIndex(c => c.correct);
+    const isCorrect = selected.correct;
+
+    if (isCorrect) score++;
+
+    // ボタンのスタイル更新
+    q.choices.forEach((c, i) => {
+        const btn = document.getElementById('choice' + i);
+        btn.disabled = true;
+        if (c.correct) btn.classList.add('correct');
+        if (i === idx && !isCorrect) btn.classList.add('wrong');
+    });
+
+    // 解説表示
+    const box = document.getElementById('explanationBox');
+    box.className = 'explanation-box show ' + (isCorrect ? 'correct-exp' : 'wrong-exp');
+    box.innerHTML = `
+        <div class="explanation-label">${isCorrect ? '&#9989; 正解！' : '&#10060; 不正解'}</div>
+        <p>${selected.explanation}</p>
+        ${!isCorrect ? '<p style="margin-top:8px;"><strong>正解:</strong> ' + q.choices[correctIdx].text + '</p><p>' + q.choices[correctIdx].explanation + '</p>' : ''}
+    `;
+
+    document.getElementById('nextWrap').classList.add('show');
+}
+
+function nextQuestion() {
+    currentIndex++;
+    renderQuestion();
+}
+
+function confirmQuit() {
+    if (confirm('クイズをやめますか？ / Quit the quiz?')) {
+        showScreen('levelScreen');
+    }
+}
+
+// ====================
+// クイズ終了 → 結果表示
+// ====================
+function finishQuiz() {
+    const total = questions.length;
+    const pct = Math.round((score / total) * 100);
+
+    // スコア保存
+    saveScore(currentLevel, score, total);
+
+    // 判定
+    let grade, gradeClass, msg;
+    if (pct >= 80) {
+        grade = '素晴らしい！ Excellent!';
+        gradeClass = 'great';
+        msg = '面接の準備はバッチリです！自信を持って臨みましょう。';
+    } else if (pct >= 50) {
+        grade = 'もう少し！ Good effort!';
+        gradeClass = 'good';
+        msg = 'もう少し勉強すれば合格ラインです。復習しましょう。';
+    } else {
+        grade = 'がんばろう！ Keep trying!';
+        gradeClass = 'poor';
+        msg = '基本をしっかり復習して、もう一度チャレンジしましょう。';
+    }
+
+    document.getElementById('resultArea').innerHTML = `
+        <h2 class="screen-title">クイズ完了！</h2>
+        <div class="result-circle ${gradeClass}">
+            ${pct}<small>%</small>
+        </div>
+        <div class="result-msg">${grade}</div>
+        <p style="font-size:1.1em; margin-bottom:4px;">${score} / ${total} 問正解</p>
+        <p class="result-detail">${msg}</p>
+        <div class="result-buttons">
+            <button class="btn btn-primary" onclick="startQuiz('${currentLevel}')">もう一度 / Retry</button>
+            <button class="btn btn-secondary" onclick="showScreen('levelScreen')">レベル選択 / Levels</button>
+            <button class="btn btn-secondary" onclick="showScreen('profileScreen')">履歴を見る / History</button>
+        </div>
+    `;
+
+    document.getElementById('progressFill').style.width = '100%';
+    showScreen('resultScreen');
+}
+
+// ====================
+// 音声再生（Web Speech API）
+// ====================
+function speakQuestion() {
+    const q = questions[currentIndex];
+    if (!q) return;
+
+    // 再生中なら停止
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        document.getElementById('speakBtn').classList.remove('speaking');
+        return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(q.question);
+    utterance.lang = 'ja-JP';
+    utterance.rate = 0.9;   // ゆっくりめ
+    utterance.pitch = 1.0;
+
+    // 日本語の音声を優先選択
+    const voices = speechSynthesis.getVoices();
+    const jaVoice = voices.find(v => v.lang.startsWith('ja'));
+    if (jaVoice) utterance.voice = jaVoice;
+
+    const btn = document.getElementById('speakBtn');
+    btn.classList.add('speaking');
+    utterance.onend = () => btn.classList.remove('speaking');
+    utterance.onerror = () => btn.classList.remove('speaking');
+
+    speechSynthesis.speak(utterance);
+}
+
+// 音声リストの事前読み込み
+if ('speechSynthesis' in window) {
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
+
+// ====================
+// プロフィール / 履歴 / ランキング
+// ====================
+function renderProfile() {
+    document.getElementById('profileTitle').textContent = currentUser + ' さんの記録';
+    renderHistory();
+    renderRanking();
+}
+
+function renderHistory() {
+    const data = getUserData();
+    const history = data.history || [];
+    const el = document.getElementById('historyTab');
+
+    if (history.length === 0) {
+        el.innerHTML = '<div class="no-history">まだ記録がありません<br>No records yet</div>';
+        return;
+    }
+
+    // 新しい順
+    const sorted = [...history].reverse();
+    el.innerHTML = '<ul class="history-list">' + sorted.map(h => `
+        <li class="history-item">
+            <div>
+                <span class="history-level ${h.level}">${getLevelLabel(h.level)}</span>
+                <span class="history-date" style="margin-left:8px;">${h.date}</span>
+            </div>
+            <div class="history-score">${h.correct}/${h.total} (${h.percent}%)</div>
+        </li>
+    `).join('') + '</ul>';
+}
+
+function renderRanking() {
+    const users = getUsers();
+    const rankings = [];
+
+    // 全ユーザーのベストスコアを集計
+    for (const [name, data] of Object.entries(users)) {
+        if (!data.history || data.history.length === 0) continue;
+        const best = data.history.reduce((max, h) => h.percent > max ? h.percent : max, 0);
+        const total = data.history.length;
+        rankings.push({ name, best, total });
+    }
+
+    // ベストスコア順にソート
+    rankings.sort((a, b) => b.best - a.best);
+
+    const el = document.getElementById('rankingTab');
+
+    if (rankings.length === 0) {
+        el.innerHTML = '<div class="no-history">まだデータがありません</div>';
+        return;
+    }
+
+    el.innerHTML = '<ul class="ranking-list">' + rankings.map((r, i) => {
+        let rankClass = 'normal';
+        if (i === 0) rankClass = 'gold';
+        else if (i === 1) rankClass = 'silver';
+        else if (i === 2) rankClass = 'bronze';
+
+        return `
+            <li class="ranking-item">
+                <div class="ranking-rank ${rankClass}">${i + 1}</div>
+                <div class="ranking-name">${escapeHtml(r.name)}${r.name === currentUser ? ' (あなた)' : ''}</div>
+                <div class="ranking-score">${r.best}%<br><small style="color:#aaa;">${r.total}回</small></div>
+            </li>
+        `;
+    }).join('') + '</ul>';
+}
+
+function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('historyTab').style.display = tab === 'history' ? 'block' : 'none';
+    document.getElementById('rankingTab').style.display = tab === 'ranking' ? 'block' : 'none';
+}
+
+// ====================
+// ユーティリティ
+// ====================
+function getLevelLabel(level) {
+    const labels = { beginner: '初級', intermediate: '中級', advanced: '上級' };
+    return labels[level] || level;
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+</script>
 </body>
 </html>
