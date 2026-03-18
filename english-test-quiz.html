@@ -565,12 +565,12 @@
                 <div class="intro-details">
                     <div class="intro-detail">
                         <div class="intro-detail-icon">📝</div>
-                        <div class="intro-detail-label">20 Questions</div>
+                        <div class="intro-detail-label">50 Questions</div>
                         <div class="intro-detail-value">Mixed question types</div>
                     </div>
                     <div class="intro-detail">
                         <div class="intro-detail-icon">⏱️</div>
-                        <div class="intro-detail-label">15 Minutes</div>
+                        <div class="intro-detail-label">30 Minutes</div>
                         <div class="intro-detail-value">Timed test</div>
                     </div>
                     <div class="intro-detail">
@@ -597,7 +597,9 @@
     <script>
     // ===== QUESTION DATA =====
     const questions = [
-        // --- VOCABULARY: Real or Not Real Words ---
+        // =====================================================
+        // VOCABULARY: Real or Not Real Words (8 questions)
+        // =====================================================
         {
             type: "vocabulary",
             instruction: "Select all the REAL English words from the list below.",
@@ -619,7 +621,45 @@
             realWords: ["abolish", "cathedral", "embark", "implicit"],
             skill: "vocab"
         },
-        // --- READING COMPREHENSION ---
+        {
+            type: "vocabulary",
+            instruction: "Select all the REAL English words from the list below.",
+            words: ["abundant", "blurthen", "consensus", "drelkish", "endeavor", "flagrant", "hemplex", "juvenile"],
+            realWords: ["abundant", "consensus", "endeavor", "flagrant", "juvenile"],
+            skill: "vocab"
+        },
+        {
+            type: "vocabulary",
+            instruction: "Select all the REAL English words from the list below.",
+            words: ["arbitrary", "clambort", "defiant", "exquable", "feasible", "grimpact", "heritage", "illicit"],
+            realWords: ["arbitrary", "defiant", "feasible", "heritage", "illicit"],
+            skill: "vocab"
+        },
+        {
+            type: "vocabulary",
+            instruction: "Select all the REAL English words from the list below.",
+            words: ["brevity", "cantrive", "dormant", "eplotion", "futile", "gallant", "hordify", "indelible"],
+            realWords: ["brevity", "dormant", "futile", "gallant", "indelible"],
+            skill: "vocab"
+        },
+        {
+            type: "vocabulary",
+            instruction: "Select all the REAL English words from the list below.",
+            words: ["candor", "displume", "fervent", "glimpter", "insolent", "jeopard", "kinetic", "luminate"],
+            realWords: ["candor", "fervent", "insolent", "kinetic"],
+            skill: "vocab"
+        },
+        {
+            type: "vocabulary",
+            instruction: "Select all the REAL English words from the list below.",
+            words: ["austere", "brellion", "colloquy", "drumpish", "ephemeral", "frostique", "guile", "hyperbole"],
+            realWords: ["austere", "colloquy", "ephemeral", "guile", "hyperbole"],
+            skill: "vocab"
+        },
+
+        // =====================================================
+        // READING COMPREHENSION (10 questions)
+        // =====================================================
         {
             type: "reading",
             passage: "The invention of the printing press in the 15th century by Johannes Gutenberg revolutionized the way information was disseminated. Before its invention, books were painstakingly copied by hand, making them rare and expensive. The printing press made it possible to produce books quickly and cheaply, which led to a dramatic increase in literacy rates across Europe.",
@@ -659,7 +699,101 @@
             correct: 2,
             skill: "reading"
         },
-        // --- GRAMMAR: Fill in the blank ---
+        {
+            type: "reading",
+            passage: "The placebo effect is a fascinating phenomenon in medicine where patients experience real improvements in their condition after receiving a treatment with no therapeutic value, such as a sugar pill. Research has shown that the placebo effect is not merely psychological — it can trigger measurable physiological changes, including the release of endorphins and changes in brain activity. The strength of the placebo effect often depends on the patient's expectations and the context in which the treatment is given.",
+            question: "According to the passage, what determines the strength of the placebo effect?",
+            choices: [
+                "The type of sugar used in the pill",
+                "The patient's expectations and the treatment context",
+                "The doctor's medical qualifications",
+                "The duration of the illness"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "Migration patterns of monarch butterflies remain one of nature's most remarkable phenomena. Each autumn, millions of monarchs travel up to 4,800 kilometers from Canada and the United States to central Mexico. What makes this journey extraordinary is that no single butterfly completes the round trip — it takes multiple generations to make the return journey north in spring, yet each generation instinctively knows the route.",
+            question: "What is most remarkable about monarch butterfly migration?",
+            choices: [
+                "They travel only at night",
+                "No single butterfly completes the full round trip, yet each generation knows the route",
+                "They migrate to avoid predators",
+                "Only female butterflies make the journey"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "The concept of 'neuroplasticity' has revolutionized our understanding of the brain. Previously, scientists believed the adult brain was essentially fixed and unchangeable. However, decades of research have demonstrated that the brain continuously reorganizes itself by forming new neural connections throughout life. This ability is particularly important in recovery from brain injuries, as undamaged areas can sometimes take over functions previously performed by damaged regions.",
+            question: "What did scientists previously believe about the adult brain?",
+            choices: [
+                "It could grow new neurons indefinitely",
+                "It was essentially fixed and unchangeable",
+                "It became more flexible with age",
+                "It could only form connections during sleep"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "The Great Pacific Garbage Patch is a massive collection of marine debris in the North Pacific Ocean. Contrary to popular imagery of a solid island of trash, it is actually a diffuse area of microplastics and larger debris spread across an area roughly twice the size of Texas. These tiny plastic fragments are particularly dangerous because marine animals mistake them for food, leading to ingestion that can cause starvation, poisoning, and death throughout the food chain.",
+            question: "Why are microplastics particularly dangerous according to the passage?",
+            choices: [
+                "They block shipping routes",
+                "They make the ocean water toxic to swim in",
+                "Marine animals mistake them for food, causing harm through the food chain",
+                "They dissolve and release chemicals into the atmosphere"
+            ],
+            correct: 2,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "Sleep deprivation affects cognitive function in ways similar to alcohol intoxication. Studies have shown that being awake for 17 consecutive hours impairs performance to a degree equivalent to having a blood alcohol concentration of 0.05%. After 24 hours without sleep, the impairment is comparable to a blood alcohol level of 0.10% — well above the legal driving limit in most countries. Despite this, many professionals routinely work extended shifts without recognizing the risks.",
+            question: "What comparison does the passage draw about sleep deprivation?",
+            choices: [
+                "It is more dangerous than any disease",
+                "It affects performance similarly to alcohol intoxication",
+                "It only affects physical coordination, not mental ability",
+                "It is only a problem for professional drivers"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "Vertical farming — growing crops in stacked layers inside controlled environments — has emerged as a potential solution to food security challenges. These indoor farms use LED lighting, precise nutrient delivery, and climate control to grow food year-round, using up to 95% less water than traditional agriculture. However, the high energy costs of powering these facilities remain the biggest obstacle to widespread adoption.",
+            question: "What is identified as the biggest obstacle to vertical farming?",
+            choices: [
+                "Lack of suitable crop varieties",
+                "High energy costs of powering the facilities",
+                "Consumer resistance to indoor-grown food",
+                "Water scarcity"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "reading",
+            passage: "The discovery of penicillin by Alexander Fleming in 1928 is often cited as one of the most important accidents in scientific history. Fleming noticed that a mold called Penicillium notatum had contaminated one of his bacterial cultures and was killing the bacteria around it. However, it took over a decade and the work of Howard Florey and Ernst Chain to develop penicillin into a usable medicine that would go on to save millions of lives during World War II and beyond.",
+            question: "What role did Florey and Chain play in the story of penicillin?",
+            choices: [
+                "They discovered the mold on Fleming's petri dish",
+                "They developed Fleming's discovery into a usable medicine",
+                "They proved that penicillin was ineffective",
+                "They replaced penicillin with a better antibiotic"
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+
+        // =====================================================
+        // GRAMMAR: Fill in the blank (10 questions)
+        // =====================================================
         {
             type: "grammar",
             sentence: "If I ___ about the meeting earlier, I would have attended.",
@@ -695,7 +829,45 @@
             correct: 1,
             skill: "grammar"
         },
-        // --- VOCABULARY: Synonym/Meaning ---
+        {
+            type: "grammar",
+            sentence: "I wish I ___ more time to prepare for the presentation.",
+            choices: ["have", "had", "would have", "am having"],
+            correct: 1,
+            skill: "grammar"
+        },
+        {
+            type: "grammar",
+            sentence: "By the time we arrived, the concert ___.",
+            choices: ["already started", "has already started", "had already started", "was already starting"],
+            correct: 2,
+            skill: "grammar"
+        },
+        {
+            type: "grammar",
+            sentence: "The manager insisted that each employee ___ a detailed progress report.",
+            choices: ["writes", "write", "wrote", "has written"],
+            correct: 1,
+            skill: "grammar"
+        },
+        {
+            type: "grammar",
+            sentence: "Not only ___ the exam, but she also scored the highest in her class.",
+            choices: ["she passed", "did she pass", "she did pass", "had she passed"],
+            correct: 1,
+            skill: "grammar"
+        },
+        {
+            type: "grammar",
+            sentence: "The data ___ that climate change is accelerating faster than previously predicted.",
+            choices: ["suggests", "suggest", "are suggesting", "have suggested"],
+            correct: 0,
+            skill: "grammar"
+        },
+
+        // =====================================================
+        // VOCABULARY: Synonym/Meaning (8 questions)
+        // =====================================================
         {
             type: "meaning",
             question: "Choose the word that is closest in meaning to 'ubiquitous':",
@@ -717,7 +889,45 @@
             correct: 2,
             skill: "vocab"
         },
-        // --- READING: Sentence Completion ---
+        {
+            type: "meaning",
+            question: "Choose the word that is closest in meaning to 'tenacious':",
+            choices: ["Fragile", "Persistent", "Temporary", "Careless"],
+            correct: 1,
+            skill: "vocab"
+        },
+        {
+            type: "meaning",
+            question: "Choose the word that is closest in meaning to 'ambiguous':",
+            choices: ["Clear", "Uncertain", "Angry", "Beautiful"],
+            correct: 1,
+            skill: "vocab"
+        },
+        {
+            type: "meaning",
+            question: "Choose the word that is closest in meaning to 'eloquent':",
+            choices: ["Silent", "Articulate", "Confused", "Aggressive"],
+            correct: 1,
+            skill: "vocab"
+        },
+        {
+            type: "meaning",
+            question: "Choose the word that is closest in meaning to 'frugal':",
+            choices: ["Generous", "Wealthy", "Thrifty", "Wasteful"],
+            correct: 2,
+            skill: "vocab"
+        },
+        {
+            type: "meaning",
+            question: "Choose the word that is closest in meaning to 'inevitable':",
+            choices: ["Avoidable", "Uncertain", "Unavoidable", "Unexpected"],
+            correct: 2,
+            skill: "vocab"
+        },
+
+        // =====================================================
+        // READING: Sentence Completion (5 questions)
+        // =====================================================
         {
             type: "complete",
             question: "Choose the best sentence to complete the paragraph:",
@@ -744,7 +954,49 @@
             correct: 1,
             skill: "reading"
         },
-        // --- GRAMMAR: Error Identification ---
+        {
+            type: "complete",
+            question: "Choose the best sentence to complete the paragraph:",
+            passage: "Electric vehicles are becoming increasingly popular as consumers seek alternatives to fossil fuels. Battery technology has improved dramatically, with modern EVs offering ranges of over 500 kilometers on a single charge. ___",
+            choices: [
+                "Nevertheless, most people still prefer horse-drawn carriages for daily commuting.",
+                "However, the lack of charging infrastructure in rural areas remains a significant barrier to adoption.",
+                "Therefore, gasoline engines will never be replaced by electric motors.",
+                "This proves that fossil fuels are the most efficient energy source available."
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+        {
+            type: "complete",
+            question: "Choose the best sentence to complete the paragraph:",
+            passage: "Language learning apps have made it easier than ever to study foreign languages. These tools use gamification, spaced repetition, and AI-powered feedback to keep learners engaged. ___",
+            choices: [
+                "However, research suggests that apps alone cannot replace immersive language practice with native speakers.",
+                "This means that traditional classrooms are now completely unnecessary.",
+                "Therefore, all language teachers should be replaced by artificial intelligence.",
+                "As a result, nobody reads books in foreign languages anymore."
+            ],
+            correct: 0,
+            skill: "reading"
+        },
+        {
+            type: "complete",
+            question: "Choose the best sentence to complete the paragraph:",
+            passage: "The James Webb Space Telescope has provided unprecedented images of distant galaxies and nebulae. Its infrared capabilities allow it to peer through cosmic dust that blocked previous telescopes. ___",
+            choices: [
+                "Unfortunately, the telescope broke down after its first image was taken.",
+                "These observations are helping scientists understand the earliest stages of the universe's formation.",
+                "However, scientists have concluded that space exploration is a waste of resources.",
+                "This technology is primarily used for weather forecasting on Earth."
+            ],
+            correct: 1,
+            skill: "reading"
+        },
+
+        // =====================================================
+        // GRAMMAR: Error Identification (5 questions)
+        // =====================================================
         {
             type: "error",
             question: "Which underlined part contains a grammatical error?",
@@ -763,7 +1015,37 @@
             explanation: "'Who' refers to 'candidates' (plural), so it should be 'who have' not 'who has'.",
             skill: "grammar"
         },
-        // --- LISTENING SIMULATION (Reading-based) ---
+        {
+            type: "error",
+            question: "Which underlined part contains a grammatical error?",
+            sentence: "The number of students [A: who prefer] online learning [B: have increased] [C: significantly] [D: over the past] decade.",
+            choices: ["A: who prefer", "B: have increased", "C: significantly", "D: over the past"],
+            correct: 1,
+            explanation: "'The number' is singular, so it should be 'has increased' not 'have increased'.",
+            skill: "grammar"
+        },
+        {
+            type: "error",
+            question: "Which underlined part contains a grammatical error?",
+            sentence: "Each of the participants [A: were given] [B: a detailed] questionnaire [C: to complete] [D: before the session].",
+            choices: ["A: were given", "B: a detailed", "C: to complete", "D: before the session"],
+            correct: 0,
+            explanation: "'Each' is singular, so it should be 'was given' not 'were given'.",
+            skill: "grammar"
+        },
+        {
+            type: "error",
+            question: "Which underlined part contains a grammatical error?",
+            sentence: "The professor, [A: along with] her graduate students, [B: are conducting] [C: groundbreaking] research [D: in the field of] genetics.",
+            choices: ["A: along with", "B: are conducting", "C: groundbreaking", "D: in the field of"],
+            correct: 1,
+            explanation: "'The professor' is the subject (singular). 'Along with her students' is a parenthetical phrase, so it should be 'is conducting'.",
+            skill: "grammar"
+        },
+
+        // =====================================================
+        // SENTENCE STRUCTURE / Dictation (4 questions)
+        // =====================================================
         {
             type: "dictation",
             instruction: "Read the sentence carefully and choose the correct version:",
@@ -789,6 +1071,32 @@
             ],
             correct: 1,
             skill: "listening"
+        },
+        {
+            type: "dictation",
+            instruction: "Read the sentence carefully and choose the correct version:",
+            question: "Which sentence is grammatically correct and natural?",
+            choices: [
+                "He is used to work late hours at the office every weekday.",
+                "He is used to working late hours at the office every weekday.",
+                "He used to working late hours at the office every weekday.",
+                "He is use to working late hours at the office every weekday."
+            ],
+            correct: 1,
+            skill: "listening"
+        },
+        {
+            type: "dictation",
+            instruction: "Read the sentence carefully and choose the correct version:",
+            question: "Which sentence is grammatically correct and natural?",
+            choices: [
+                "Had I known about the delay, I would have taken a different route.",
+                "If I would have known about the delay, I would have taken a different route.",
+                "Had I knew about the delay, I would have taken a different route.",
+                "If I had knew about the delay, I would have taken a different route."
+            ],
+            correct: 0,
+            skill: "listening"
         }
     ];
 
@@ -796,7 +1104,7 @@
     let currentQ = 0;
     let answers = [];
     let timerInterval = null;
-    let timeLeft = 15 * 60; // 15 minutes
+    let timeLeft = 30 * 60; // 30 minutes
     let testStarted = false;
 
     // ===== FUNCTIONS =====
@@ -809,7 +1117,7 @@
         testStarted = true;
         answers = new Array(questions.length).fill(null);
         currentQ = 0;
-        timeLeft = 15 * 60;
+        timeLeft = 30 * 60;
         startTimer();
         showScreen('questionScreen');
         renderQuestion();
